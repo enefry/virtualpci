@@ -1,0 +1,69 @@
+# $Id: Makefile.kmk 28800 2010-04-27 08:22:32Z vboxsync $
+## @file
+# Makefile for the device and driver samples.
+#
+
+#
+# Copyright (C) 2010 Max Rozhkov <feruxmax@gmail.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License version
+# 2 as published by the Free Software Foundation.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# --------------------------------------------------------------------
+#
+# This code is based on:
+# Makefile of sample device of VirtualBox OSE
+#
+# Copyright (C) 2009 Oracle Corporation
+#
+# This file is part of VirtualBox Open Source Edition (OSE), as
+# available from http://www.virtualbox.org. This file is free software;
+# you can redistribute it and/or modify it under the terms of the GNU
+# General Public License (GPL) as published by the Free Software
+# Foundation, in version 2 as it comes in the "COPYING" file of the
+# VirtualBox OSE distribution. VirtualBox OSE is distributed in the
+# hope that it will be useful, but WITHOUT ANY WARRANTY of any kind.
+#
+SUB_DEPTH = ../../../..
+include $(KBUILD_PATH)/subheader.kmk
+
+
+#
+# VBoxSampleDriver - A sample device module.
+#
+DLLS += VirtualPci
+
+VirtualPci_TEMPLATE = VBOXR3
+VirtualPci_SONAME.linux = VirtualPci.so
+#VirtualPci_NOINST   = true
+VirtualPci_SOURCES  = \
+	devVirtualPci.cpp
+VirtualPci_LIBS     = \
+	$(LIB_RUNTIME) \
+	$(LIB_VMM) \
+	$(LIB_REM)
+
+#
+# VBoxSampleDriver - A sample device module.
+#
+DLLS += PipePci
+
+PipePci_TEMPLATE = VBOXR3
+PipePci_SONAME.linux = PipePci.so
+PipePci_SOURCES = \
+		drvPipePci.cpp
+PipePci_LIBS	= \
+	$(LIB_RUNTIME) \
+	$(LIB_VMM) \
+	$(LIB_REM)
+
+include $(KBUILD_PATH)/subfooter.kmk

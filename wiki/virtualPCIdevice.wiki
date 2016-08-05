@@ -1,0 +1,41 @@
+= Introduction =
+
+= Details =
+
+= Install/Установка =
+== Compile/Компиляция ==
+Для компиляции устройства необходимо:
+ * Скачать текущую версию проекта
+{{{
+svn checkout http://virtualpci.googlecode.com/svn/trunk/ path_to_VirtualBox_source/src/VBox/Devices/virtualpci
+}}}
+ * перейти в каталог virtualpci
+ * запустить компиляцию
+{{{
+../../../../kBuild/bin/linux.x86/kmk
+}}}
+Для подключения виртуального устройства к VirtualBox
+
+== Configure/Настройка ==
+Прежде чем запускать виртуальную машину нужно подключить полученные в результате компиляции динамические библиотеки к виртуальной машине. Для этого в конфигурационный файл настроек ВМ (machine_name.xml) нужно добавить следующее:
+{{{
+<ExtraData>
+...
+      <ExtraDataItem name="VBoxInternal/Devices/VirtualPci/0/LUN#0/Driver" value="PipePci"/>
+      <ExtraDataItem name="VBoxInternal/Devices/VirtualPci/0/PCIDeviceNo" value="15"/>
+      <ExtraDataItem name="VBoxInternal/Devices/VirtualPci/0/PCIFunctionNo" value="0"/>
+      <ExtraDataItem name="VBoxInternal/PDM/Devices/VirtualPci/0/Config/Load" value="yes"/>
+      <ExtraDataItem name="VBoxInternal/PDM/Drivers/PipePci/0/Config/Load" value="yes"/>
+</ExtraData>
+}}}
+
+Параметры PCIDeviceNo и PCIFunctionNo задают на размещение устройства и не являются обязательными.
+
+= Working with virtualpci/Работа с виртуальным устройством=
+
+Взаимодействие хост-системы виртуальным устройством происходит через pipe (/tmp/pci.pipe в *nix-хост системах).
+Для этого можно использовать программу socat
+{{{
+socat STDIO /tmp/pci.pipe
+}}}
+Для Windows можно использовать эмулятор pipe: vmwaregateway. Эта программа должна быть запущена ДО запуска виртуальной машины.
